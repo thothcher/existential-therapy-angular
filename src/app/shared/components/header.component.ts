@@ -35,15 +35,16 @@ export interface NavLink {
 /** Six in the bar is what the Georgian labels actually fit at 1240px. */
 export const NAV_PRIMARY: NavLink[] = [
   { path: '/',           key: 'nav.home',       icon: 'house', exact: true },
+  { path: '/learn',      key: 'nav.learn',      icon: 'graduation-cap' },
   { path: '/givens',     key: 'nav.givens',     icon: 'layers' },
   { path: '/thinkers',   key: 'nav.thinkers',   icon: 'users' },
   { path: '/practices',  key: 'nav.practices',  icon: 'compass' },
-  { path: '/scenarios',  key: 'nav.scenarios',  icon: 'quote' },
   { path: '/games',      key: 'nav.games',      icon: 'puzzle' }
 ];
 
 /** The reference tools: one click behind "more", and listed in full in the drawer. */
 export const NAV_MORE: NavLink[] = [
+  { path: '/scenarios', key: 'nav.scenarios', icon: 'quote' },
   { path: '/lexicon',   key: 'nav.lexicon',   icon: 'book-open' },
   { path: '/inventory', key: 'nav.inventory', icon: 'notebook-pen' },
   { path: '/vs-cbt',    key: 'nav.vscbt',     icon: 'scale' },

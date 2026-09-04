@@ -18,11 +18,17 @@
    ========================================================================== */
 
 import { RenderMode, ServerRoute } from '@angular/ssr';
+import { CURRICULUM } from './core/data/curriculum.data';
 import { THINKERS } from './core/data/thinkers.data';
 import { PRACTICES } from './core/data/practices.data';
 import { SCENARIOS } from './core/data/scenarios.data';
 
 export const serverRoutes: ServerRoute[] = [
+  {
+    path: 'learn/:slug',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: async () => CURRICULUM.map(module => ({ slug: module.slug }))
+  },
   {
     path: 'thinkers/:slug',
     renderMode: RenderMode.Prerender,

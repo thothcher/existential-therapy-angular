@@ -17,6 +17,20 @@ export const routes: Routes = [
     data: { titleKey: 'meta.home', descKey: 'meta.desc.home' }
   },
 
+  /* ---- the course ------------------------------------------------------ */
+  {
+    path: 'learn',
+    loadComponent: () =>
+      import('./features/learn/learn-path.component').then(m => m.LearnPathComponent),
+    data: { titleKey: 'meta.learn', descKey: 'learn.lead' }
+  },
+  {
+    path: 'learn/:slug',
+    loadComponent: () =>
+      import('./features/learn/module.component').then(m => m.ModuleComponent),
+    data: { titleKey: 'meta.learn', descKey: 'learn.lead' }
+  },
+
   /* ---- content --------------------------------------------------------- */
   {
     path: 'givens',

@@ -20,14 +20,16 @@ import { PRACTICES } from '../data/practices.data';
 import { LEXICON } from '../data/lexicon.data';
 import { SCENARIOS } from '../data/scenarios.data';
 import type {
-  GameProgress, Given, InventoryEntry, LexiconTerm, Practice, Scenario, Thinker
+  GameProgress, Given, InventoryEntry, LexiconTerm, ModuleProgress,
+  Practice, Scenario, Thinker
 } from '../models';
 
 const KEYS = {
   overrides: 'et_overrides',
   progress: 'et_progress',
   notes: 'et_notes',
-  inventory: 'et_inventory'
+  inventory: 'et_inventory',
+  course: 'et_course'
 } as const;
 
 type Overrides = Record<string, Record<string, Record<string, unknown>>>;
@@ -111,6 +113,49 @@ export class StoreService {
 
   resetOverrides(): void {
     this.storage.remove(KEYS.overrides);
+    this.revision.update(n => n + 1);
+  }
+
+  /* ---- course progress ----------------------------------------------------
+     The catalogues are browsable in any order; the course is the one thing
+     here with a sequence, so it is the one thing worth remembering. Stored per
+     module as a list of finished step ids rather than a count, so re-doing a
+     step is idempotent and reordering the curriculum never invents progress. */
+
+  readonly course = computed<Record<string, ModuleProgress>>(() => {
+    this.revision();
+    const stored = this.storage.get<Record<string, ModuleProgress> | null>(KEYS.course, null);
+    return stored && typeof stored === 'object' ? stored : {};
+  });
+
+  moduleProgress(moduleId: string): ModuleProgress {
+    return this.course()[moduleId] ?? { steps: [], completedAt: null };
+  }
+
+  isStepDone(moduleId: string, stepId: string): boolean {
+    return this.moduleProgress(moduleId).steps.includes(stepId);
+  }
+
+  /**
+   * Marks one step finished. `total` is the module's step count, so the module
+   * can stamp its own completedAt the moment the last one lands.
+   */
+  completeStep(moduleId: string, stepId: string, total: number): void {
+    const entry = this.moduleProgress(moduleId);
+    if (entry.steps.includes(stepId)) return;
+
+    const steps = [...entry.steps, stepId];
+    const all = { ...this.course() };
+    all[moduleId] = {
+      steps,
+      completedAt: steps.length >= total ? new Date().toISOString() : entry.completedAt
+    };
+    this.storage.set(KEYS.course, all);
+    this.revision.update(n => n + 1);
+  }
+
+  resetCourse(): void {
+    this.storage.remove(KEYS.course);
     this.revision.update(n => n + 1);
   }
 

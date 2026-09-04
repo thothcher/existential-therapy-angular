@@ -185,6 +185,56 @@ export interface TimelineItem {
 
 /* ---- local state -------------------------------------------------------- */
 
+/* ---- the course --------------------------------------------------------- */
+
+/**
+ * A step is the smallest thing a reader can finish. Four kinds, because they
+ * are the four things a module ever asks of someone: take this in, go look at
+ * it, show you followed, put it against your own experience.
+ */
+export type StepKind = 'read' | 'visit' | 'quiz' | 'reflect';
+
+export interface QuizOption {
+  text: Bilingual;
+  /** Exactly one option per quiz step carries this. */
+  correct?: boolean;
+  /** Shown after answering, for the chosen option and the right one alike. */
+  why: Bilingual;
+}
+
+export interface ModuleStep {
+  id: string;
+  kind: StepKind;
+  title: Bilingual;
+  /** read: paragraphs split on a blank line. quiz / reflect: the prompt. */
+  body: Bilingual;
+  /** visit only — an existing page, never a copy of one. */
+  link?: { path: string; label: Bilingual };
+  /** quiz only. */
+  options?: QuizOption[];
+}
+
+export interface CourseModule {
+  id: string;
+  slug: string;
+  order: number;
+  icon: string;
+  /** Honest reading time for the whole module, including the pages it sends you to. */
+  minutes: number;
+  title: Bilingual;
+  summary: Bilingual;
+  /** Completed as "By the end you will be able to …". */
+  outcomes: Bilingual[];
+  steps: ModuleStep[];
+}
+
+/** What the reader has finished in one module. */
+export interface ModuleProgress {
+  /** Step ids, in the order they were finished. */
+  steps: string[];
+  completedAt: string | null;
+}
+
 export interface GameProgress {
   best: number;
   bestTotal: number;

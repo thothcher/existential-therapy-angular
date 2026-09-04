@@ -15,6 +15,7 @@ import { PlateComponent } from '../../shared/components/plate.component';
 import { RevealDirective } from '../../shared/directives/reveal.directive';
 import { ParallaxDirective } from '../../shared/directives/parallax.directive';
 import { GAMES } from '../games/games.catalogue';
+import { CURRICULUM, TOTAL_STEPS } from '../../core/data/curriculum.data';
 
 const FEATURED_THINKERS = ['frankl', 'yalom', 'heidegger', 'may', 'sartre', 'kierkegaard'];
 
@@ -108,6 +109,41 @@ const FEATURED_THINKERS = ['frankl', 'yalom', 'heidegger', 'may', 'sartre', 'kie
               {{ i18n.pick(given.tagline) }}
             </p>
           </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ================= the course =================
+     Directly after the givens, because that is the moment a first-time reader
+     has seen enough to want an order and has not yet been handed six
+     catalogues. Shows a resume bar once there is progress to resume. -->
+<section class="section">
+  <div class="wrap">
+    <div class="resume" appReveal="fade">
+      @if (courseStarted()) {
+        <div>
+          <p class="t-eyebrow"><span>{{ i18n.t('home.resume.eyebrow') }}</span></p>
+          <h2 class="t-subtitle" style="margin-top:.6rem">{{ i18n.t('home.resume.title') }}</h2>
+          @if (nextModule(); as module) {
+            <p class="t-body muted" style="margin-top:.4rem">{{ i18n.pick(module.title) }}</p>
+          }
+          <div class="meter resume-bar">
+            <span class="meter-fill" [style.width.%]="coursePercent()"></span>
+          </div>
+        </div>
+        <a class="btn btn-primary" [routerLink]="nextModule() ? ['/learn', nextModule()!.slug] : ['/learn']">
+          {{ i18n.t('learn.continue') }}<app-icon name="arrow-right" cls="icon-sm" />
+        </a>
+      } @else {
+        <div>
+          <p class="t-eyebrow"><span>{{ i18n.t('home.learn.eyebrow') }}</span></p>
+          <h2 class="t-subtitle" style="margin-top:.6rem">{{ i18n.t('home.learn.title') }}</h2>
+          <p class="t-body muted measure" style="margin-top:.5rem">{{ i18n.t('home.learn.lead') }}</p>
+        </div>
+        <a class="btn btn-primary" routerLink="/learn">
+          {{ i18n.t('home.learn.cta') }}<app-icon name="arrow-right" cls="icon-sm" />
         </a>
       }
     </div>
@@ -310,6 +346,25 @@ export class HomeComponent {
   protected readonly i18n = inject(I18nService);
   protected readonly store = inject(StoreService);
   protected readonly games = GAMES;
+
+  /* ---- the course band ---------------------------------------------------
+     A first-time visitor sees the invitation; a returning one sees where they
+     stopped. Both are the same block, because two blocks would compete. */
+
+  private readonly stepsDone = computed(() =>
+    CURRICULUM.reduce((sum, module) => sum + this.store.moduleProgress(module.id).steps.length, 0)
+  );
+
+  protected readonly courseStarted = computed(() => this.stepsDone() > 0);
+
+  protected readonly coursePercent = computed(() =>
+    TOTAL_STEPS ? Math.round((this.stepsDone() / TOTAL_STEPS) * 100) : 0
+  );
+
+  /** First module with anything left in it. */
+  protected readonly nextModule = computed(() =>
+    CURRICULUM.find(module => this.store.moduleProgress(module.id).completedAt === null) ?? null
+  );
 
   protected readonly stats = computed(() => [
     { key: 'home.stats.givens', value: this.store.givens().length },
