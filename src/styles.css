@@ -931,9 +931,36 @@ textarea.field { min-height: 7rem; resize: vertical; line-height: 1.6; }
 .plate-credit a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--hairline); }
 .plate-credit a:hover { color: var(--text-strong); border-bottom-color: currentColor; }
 
-/* Text sitting on a plate is always light, regardless of theme. */
-.on-plate { color: #F2F5F9; }
-.on-plate .muted { color: rgba(242, 245, 249, 0.72); }
+/* Text sitting on a plate is always light, regardless of theme.
+
+   Redefining the tokens rather than just `color`, because setting `color`
+   alone did not work: .t-display, .t-title and .t-subtitle declare
+   color: var(--text-strong) on the element itself, and a declaration on the
+   element always wins over a colour inherited from an ancestor — so in the
+   light theme a headline over the dark hero came out near-black.
+
+   The values are the dark theme's, which are already tuned for contrast on a
+   near-black ground. That also means a .btn-primary here picks up the pale
+   accent and dark label the dark theme gives it, which is what belongs on this
+   background. */
+.on-plate {
+  --text:        var(--n-200);
+  --text-strong: var(--n-50);
+  --text-muted:  var(--n-400);
+  --text-faint:  var(--n-500);
+  --text-on-accent: #06131F;
+
+  --accent:       var(--a-400);
+  --accent-hover: var(--a-300);
+  --accent-soft:  rgba(96, 165, 250, 0.12);
+  --accent-line:  rgba(96, 165, 250, 0.26);
+  --accent-ring:  rgba(96, 165, 250, 0.4);
+
+  --hairline: rgba(255, 255, 255, 0.16);
+
+  color: var(--text);
+}
+.on-plate .muted { color: var(--text-muted); }
 
 /* Generated plates (js/plate.js). The three variables below are the only
    colours a plate uses, so it follows the theme like everything else. */
@@ -1302,9 +1329,9 @@ textarea.field { min-height: 7rem; resize: vertical; line-height: 1.6; }
 .hero-caption-quiet {
   margin: 2.5rem 0 0;
   padding-inline-start: 1rem;
-  border-inline-start: 2px solid rgba(242, 245, 249, 0.22);
+  border-inline-start: 2px solid var(--hairline);
   max-width: 34ch;
-  color: rgba(242, 245, 249, 0.72);
+  color: var(--text-muted);
 }
 
 /* A ghost button on a dark ground cannot use --surface. */
