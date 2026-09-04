@@ -119,8 +119,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     'home.hero.eyebrow': 'ეგზისტენციალური თერაპია',
     'home.hero.title': 'ადამიანი არ არის ამოცანა, რომელიც უნდა გადაწყდეს',
     'home.hero.lead': 'ის არის ყოფიერება, რომელსაც უნდა შევხვდეთ. ეს სივრცე გიწვევთ არა ტექნიკების ნაკრების დასაზეპირებლად, არამედ იმ კითხვებთან დასაბრუნებლად, რომლებიც თითოეულ ჩვენგანს თან სდევს დაბადებიდან.',
-    'home.hero.cta': 'დაიწყეთ ოთხი მოცემულობით',
-    'home.hero.secondary': 'ნახეთ სცენარები',
+    'home.hero.cta': 'კურსის დაწყება',
+    'home.hero.secondary': 'ოთხი მოცემულობა',
     'home.hero.caption': 'იქ, სადაც ნისლი იშლება, არაფერი ახალი არ ჩნდება — უბრალოდ ვხედავთ იმას, რაც ყოველთვის იყო.',
 
     'home.stats.givens': 'საბოლოო მოცემულობა',
@@ -506,8 +506,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     'home.hero.eyebrow': 'Existential therapy',
     'home.hero.title': 'A person is not a problem to be solved',
     'home.hero.lead': 'A person is a way of being, to be met. This space does not invite you to memorise a set of techniques. It invites you back to the questions that have accompanied each of us since birth.',
-    'home.hero.cta': 'Begin with the four givens',
-    'home.hero.secondary': 'See the scenarios',
+    'home.hero.cta': 'Start the course',
+    'home.hero.secondary': 'The four givens',
     'home.hero.caption': 'Where the fog lifts, nothing new appears. We simply see what was always there.',
 
     'home.stats.givens': 'ultimate concerns',

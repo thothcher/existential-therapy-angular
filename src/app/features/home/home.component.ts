@@ -14,6 +14,7 @@ import { IconComponent } from '../../shared/components/icon.component';
 import { PlateComponent } from '../../shared/components/plate.component';
 import { RevealDirective } from '../../shared/directives/reveal.directive';
 import { ParallaxDirective } from '../../shared/directives/parallax.directive';
+import { HeroSceneComponent } from '../../shared/components/hero-scene.component';
 import { GAMES } from '../games/games.catalogue';
 import { CURRICULUM, TOTAL_STEPS } from '../../core/data/curriculum.data';
 
@@ -22,53 +23,51 @@ const FEATURED_THINKERS = ['frankl', 'yalom', 'heidegger', 'may', 'sartre', 'kie
 @Component({
   selector: 'app-home',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, IconComponent, PlateComponent, RevealDirective, ParallaxDirective],
+  imports: [RouterLink, IconComponent, PlateComponent, RevealDirective, ParallaxDirective, HeroSceneComponent],
   template: `
-<!-- ================= hero ================= -->
-<section class="hero">
-  <div class="wrap">
-    <div class="hero-grid">
+<!-- ================= hero =================
+     Full-bleed and dark in both themes. The WebGL field carries the depth the
+     rest of the site draws flat; where it cannot run, the gradient and grain
+     underneath are the design rather than a gap. -->
+<section class="hero-immersive">
+  <app-hero-scene />
+  <div class="hero-veil" aria-hidden="true"></div>
 
-      <div>
-        <p class="t-eyebrow" appReveal="fade"><span>{{ i18n.t('home.hero.eyebrow') }}</span></p>
-        <h1 class="t-display" style="margin-top:1.25rem" appReveal [appRevealDelay]="80">
-          {{ i18n.t('home.hero.title') }}
-        </h1>
-        <p class="t-lead measure" style="margin-top:1.5rem" appReveal [appRevealDelay]="160">
-          {{ i18n.t('home.hero.lead') }}
-        </p>
+  <div class="wrap hero-inner on-plate">
+    <p class="t-eyebrow" appReveal="fade"><span>{{ i18n.t('home.hero.eyebrow') }}</span></p>
+    <h1 class="t-display hero-headline" appReveal [appRevealDelay]="80">
+      {{ i18n.t('home.hero.title') }}
+    </h1>
+    <p class="t-lead measure" style="margin-top:1.5rem" appReveal [appRevealDelay]="160">
+      {{ i18n.t('home.hero.lead') }}
+    </p>
 
-        <div class="hero-actions" appReveal [appRevealDelay]="240">
-          <a class="btn btn-primary" routerLink="/givens">
-            <span>{{ i18n.t('home.hero.cta') }}</span>
-            <app-icon name="arrow-right" cls="icon-sm" />
-          </a>
-          <a class="btn btn-ghost" routerLink="/scenarios">{{ i18n.t('home.hero.secondary') }}</a>
-        </div>
-      </div>
-
-      <div class="hero-media" appReveal="left" [appRevealDelay]="120">
-        <div class="plate hero-plate">
-          <img src="https://images.unsplash.com/photo-1487621167305-5d248087c724?auto=format&fit=crop&w=1400&q=80"
-               alt="" fetchpriority="high"
-               [appParallax]="0.05" [appParallaxClamp]="30"
-               style="transform: translate3d(0, var(--parallax, 0px), 0) scale(1.08)">
-        </div>
-        <figure class="hero-caption" style="margin-block:0">
-          <blockquote class="t-body" style="margin:0">{{ i18n.t('home.hero.caption') }}</blockquote>
-        </figure>
-      </div>
-
+    <div class="hero-actions" appReveal [appRevealDelay]="240">
+      <a class="btn btn-primary" routerLink="/learn">
+        <span>{{ i18n.t('home.hero.cta') }}</span>
+        <app-icon name="arrow-right" cls="icon-sm" />
+      </a>
+      <a class="btn btn-on-dark" routerLink="/givens">{{ i18n.t('home.hero.secondary') }}</a>
     </div>
 
-    <div class="stats stats-offset" style="margin-top:4rem">
-      @for (stat of stats(); track stat.key; let i = $index) {
-        <div appReveal [appRevealDelay]="i * 70">
-          <span class="stat-num">{{ stat.value }}</span>
-          <span class="t-micro">{{ i18n.t(stat.key) }}</span>
-        </div>
-      }
-    </div>
+    <figure class="hero-caption-quiet" appReveal [appRevealDelay]="320">
+      <blockquote class="t-body" style="margin:0">{{ i18n.t('home.hero.caption') }}</blockquote>
+    </figure>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <app-icon name="arrow-down" cls="icon-sm" />
+  </div>
+</section>
+
+<section class="wrap" style="padding-block:3.5rem 0">
+  <div class="stats">
+    @for (stat of stats(); track stat.key; let i = $index) {
+      <div appReveal [appRevealDelay]="i * 70">
+        <span class="stat-num">{{ stat.value }}</span>
+        <span class="t-micro">{{ i18n.t(stat.key) }}</span>
+      </div>
+    }
   </div>
 </section>
 
