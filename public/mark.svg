@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Brand mark: a threshold. An open doorway drawn as a single aperture with a
+     horizon line passing through it — being, and the opening onto it.
+     Uses currentColor so it inherits the accent in both themes. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"
+     stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+     role="img" aria-label="">
+  <!-- the aperture: an arch open at the foot -->
+  <path d="M8 29V14a8 8 0 0 1 16 0v15"/>
+  <!-- the horizon passing through it -->
+  <path d="M2 21h6" opacity=".45"/>
+  <path d="M24 21h6" opacity=".45"/>
+  <!-- the standing point -->
+  <circle cx="16" cy="21" r="2.4"/>
+</svg>
