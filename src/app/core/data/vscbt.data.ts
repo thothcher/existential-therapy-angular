@@ -116,7 +116,7 @@ export const VSCBT_CONVERGE: Bilingual[] = [
     en: 'Both take seriously what the client actually says, and neither relies on hidden meanings only the therapist can read.'
   },
   {
-    ka: 'ორივეში სოკრატული კითხვა ცენტრალურია — თუმცა ისინი სხვადასხვა მიმართულებით ბურღავენ: კპთ სისწორისკენ, ეგზისტენციალური მნიშვნელობისკენ.',
+    ka: 'ორივეში სოკრატული კითხვა ცენტრალურია — თუმცა ისინი სხვადასხვა მიმართულებით ბურღავენ: კბთ სისწორისკენ, ეგზისტენციალური მნიშვნელობისკენ.',
     en: 'Socratic questioning is central to both — though they drill in different directions: CBT toward accuracy, existential work toward significance.'
   },
   {
@@ -124,7 +124,7 @@ export const VSCBT_CONVERGE: Bilingual[] = [
     en: 'Both reject the therapist as an oracle who possesses the answer.'
   },
   {
-    ka: 'თანამედროვე კპთ-ს მესამე ტალღა — განსაკუთრებით ACT — ეგზისტენციალურ თემებს პირდაპირ ეხება: ღირებულებები, მიღება, აზრი, კონტექსტში მყოფი მე.',
+    ka: 'თანამედროვე კბთ-ს მესამე ტალღა — განსაკუთრებით ACT — ეგზისტენციალურ თემებს პირდაპირ ეხება: ღირებულებები, მიღება, აზრი, კონტექსტში მყოფი მე.',
     en: 'The third wave of CBT — ACT above all — touches existential themes directly: values, acceptance, meaning, the self in context.'
   },
   {
@@ -158,7 +158,7 @@ export const VSCBT_WHEN_CBT: Bilingual[] = [
 
 export const VSCBT_WHEN_EX: Bilingual[] = [
   {
-    ka: 'როცა „ყველაფერი კარგადაა" და მაინც არაფერს აქვს გემო — და კპთ-ს პროტოკოლს სამიზნე სიმპტომი ვერ უპოვია.',
+    ka: 'როცა „ყველაფერი კარგადაა" და მაინც არაფერს აქვს გემო — და კბთ-ს პროტოკოლს სამიზნე სიმპტომი ვერ უპოვია.',
     en: 'When everything is "fine" and nothing has any taste — and a CBT protocol cannot find a target symptom.'
   },
   {
@@ -166,7 +166,7 @@ export const VSCBT_WHEN_EX: Bilingual[] = [
     en: 'Before a diagnosis, a loss, an unavoidable change, where the problem is not a distorted thought — it is real.'
   },
   {
-    ka: 'როცა კლიენტმა უკვე გაიარა კპთ, ისწავლა ტექნიკები და ამბობს: „ეს ყველაფერი მესმის და მაინც არ ვიცი, რისთვის ვცხოვრობ."',
+    ka: 'როცა კლიენტმა უკვე გაიარა კბთ, ისწავლა ტექნიკები და ამბობს: „ეს ყველაფერი მესმის და მაინც არ ვიცი, რისთვის ვცხოვრობ."',
     en: 'When a client has already done CBT, learned the techniques, and says: "I understand all of it and I still don’t know what I am living for."'
   },
   {

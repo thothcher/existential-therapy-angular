@@ -22,7 +22,7 @@ export const PRACTICES: Practice[] = [
       en: 'A question that asks nothing of the therapist — it returns the client to what they already know.'
     },
     whatItIs: {
-      ka: 'სოკრატული დიალოგი ეგზისტენციალურ თერაპიაში სხვა რამეა, ვიდრე კპთ-ში. კპთ-ში სოკრატული კითხვა ამოწმებს აზრის სისწორეს: „რა მტკიცებულება გაქვთ?" ეგზისტენციალურ თერაპიაში ის ღრმავდება მნიშვნელობისკენ: „და თუ ეს ასეა, რას ნიშნავს ეს თქვენი ცხოვრებისთვის?"\n\nთერაპევტი აქ არ იცის პასუხი წინასწარ. ეს არ არის რიტორიკული ხერხი, რომლითაც კლიენტი წინასწარ არჩეულ დასკვნამდე მიჰყავთ. თუ თერაპევტმა უკვე იცის, სად უნდა მივიდეს საუბარი, ეს აღარ არის სოკრატული დიალოგი — ეს დარწმუნებაა.',
+      ka: 'სოკრატული დიალოგი ეგზისტენციალურ თერაპიაში სხვა რამეა, ვიდრე კბთ-ში. კბთ-ში სოკრატული კითხვა ამოწმებს აზრის სისწორეს: „რა მტკიცებულება გაქვთ?" ეგზისტენციალურ თერაპიაში ის ღრმავდება მნიშვნელობისკენ: „და თუ ეს ასეა, რას ნიშნავს ეს თქვენი ცხოვრებისთვის?"\n\nთერაპევტი აქ არ იცის პასუხი წინასწარ. ეს არ არის რიტორიკული ხერხი, რომლითაც კლიენტი წინასწარ არჩეულ დასკვნამდე მიჰყავთ. თუ თერაპევტმა უკვე იცის, სად უნდა მივიდეს საუბარი, ეს აღარ არის სოკრატული დიალოგი — ეს დარწმუნებაა.',
       en: 'Socratic dialogue in existential therapy is a different thing from its CBT namesake. In CBT the Socratic question tests the accuracy of a thought: "what is your evidence?" In existential therapy it deepens toward significance: "and if that is so, what does it mean for your life?"\n\nThe therapist here does not know the answer in advance. This is not a rhetorical device for walking a client to a predetermined conclusion. If the therapist already knows where the conversation should arrive, it is no longer Socratic dialogue — it is persuasion.'
     },
     whyItWorks: {
