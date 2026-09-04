@@ -98,7 +98,7 @@ export const NAV_ALL = [...NAV_PRIMARY, ...NAV_MORE];
       </nav>
 
       <div class="header-actions">
-        <div class="lang-switch" role="group" [attr.aria-label]="i18n.t('common.language')">
+        <div class="lang-switch header-wide-only" role="group" [attr.aria-label]="i18n.t('common.language')">
           <button type="button" class="lang-opt" [attr.aria-pressed]="i18n.lang() === 'ka'"
                   (click)="i18n.setLang('ka')">ქარ</button>
           <button type="button" class="lang-opt" [attr.aria-pressed]="i18n.lang() === 'en'"
@@ -113,12 +113,12 @@ export const NAV_ALL = [...NAV_PRIMARY, ...NAV_MORE];
         </button>
 
         @if (auth.currentUser(); as user) {
-          <a class="icon-btn" routerLink="/admin"
+          <a class="icon-btn header-wide-only" routerLink="/admin"
              [attr.aria-label]="i18n.t('auth.account')" [title]="user.name">
             <app-icon name="user" />
           </a>
         } @else {
-          <a class="icon-btn" routerLink="/login" [attr.aria-label]="i18n.t('meta.login')">
+          <a class="icon-btn header-wide-only" routerLink="/login" [attr.aria-label]="i18n.t('meta.login')">
             <app-icon name="log-in" />
           </a>
         }
@@ -158,6 +158,31 @@ export const NAV_ALL = [...NAV_PRIMARY, ...NAV_MORE];
         </a>
       }
     </nav>
+
+    <!-- Only rendered where the bar has dropped them; see .drawer-foot. -->
+    <div class="drawer-foot">
+      @if (auth.currentUser(); as user) {
+        <a class="drawer-link" routerLink="/admin" (click)="closeDrawer()">
+          <app-icon name="user" cls="icon-sm" />
+          <span>{{ user.name }}</span>
+        </a>
+      } @else {
+        <a class="drawer-link" routerLink="/login" (click)="closeDrawer()">
+          <app-icon name="log-in" cls="icon-sm" />
+          <span>{{ i18n.t('meta.login') }}</span>
+        </a>
+      }
+
+      <div class="drawer-lang">
+        <span class="t-micro">{{ i18n.t('common.language') }}</span>
+        <div class="lang-switch" role="group" [attr.aria-label]="i18n.t('common.language')">
+          <button type="button" class="lang-opt" [attr.aria-pressed]="i18n.lang() === 'ka'"
+                  (click)="i18n.setLang('ka')">ქარ</button>
+          <button type="button" class="lang-opt" [attr.aria-pressed]="i18n.lang() === 'en'"
+                  (click)="i18n.setLang('en')">ENG</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
   `

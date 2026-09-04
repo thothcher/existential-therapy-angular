@@ -732,6 +732,37 @@ textarea.field { min-height: 7rem; resize: vertical; line-height: 1.6; }
   box-shadow: var(--shadow-soft);
 }
 
+/* On a phone the bar keeps the brand, the theme toggle and the menu — and
+   nothing else. Five controls across 390px overflowed the bar and left the
+   menu button with nothing separating it from the row, so it read as one more
+   icon rather than the way in. The language switch and the account link move
+   into the drawer, where there is room to label them.
+
+   700px, not the 1240px where the menu button appears: between the two there
+   is space for all four, and a tablet should not lose a one-tap control it can
+   comfortably fit. */
+@media (max-width: 700px) {
+  .header-wide-only { display: none; }
+  /* Sets the menu apart from the toggle beside it. */
+  .nav-toggle { margin-inline-start: 0.4rem; }
+}
+@media (min-width: 701px) {
+  .drawer-foot { display: none; }
+}
+
+.drawer-foot {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--hairline);
+}
+.drawer-lang {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0.9rem 0.35rem;
+}
+
 /* Mobile drawer */
 .nav-toggle { display: inline-grid; }
 @media (min-width: 1240px) { .nav-toggle { display: none; } }
