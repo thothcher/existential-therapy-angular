@@ -1447,7 +1447,10 @@ textarea.field { min-height: 7rem; resize: vertical; line-height: 1.6; }
 
 .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
 .search-wrap { position: relative; flex: 1 1 16rem; min-width: 0; }
-.search-wrap > .icon {
+/* Descendant, not child: IconComponent renders the glyph inside its own
+   <app-icon> host, so the svg is a layout child of .search-wrap but never a
+   DOM child of it. A > here matched nothing and the icon sat above the field. */
+.search-wrap .icon {
   position: absolute;
   left: 0.9rem;
   top: 50%;
