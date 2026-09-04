@@ -141,6 +141,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     'thinkers.detail.origin': 'წარმოშობა',
     'thinkers.detail.related': 'მონათესავე მოაზროვნეები',
     'thinkers.notFound': 'ასეთი მოაზროვნე ვერ მოიძებნა.',
+    'thinkers.portraitAlt': '{name} — პორტრეტი',
+    'thinkers.credit': 'ფოტო: {credit} · {license}',
 
     /* ---- practices ---- */
     'practices.title': 'პრაქტიკები',
@@ -485,6 +487,8 @@ export const STRINGS: Record<Lang, Record<string, string>> = {
     'thinkers.detail.origin': 'Origin',
     'thinkers.detail.related': 'Kindred thinkers',
     'thinkers.notFound': 'That thinker could not be found.',
+    'thinkers.portraitAlt': '{name} — portrait',
+    'thinkers.credit': 'Photograph: {credit} · {license}',
 
     'practices.title': 'Practices',
     'practices.lead': 'Existential therapy is often taken to be nothing but conversation. In fact it has definite, tested interventions — each with its own logic and its own dangers.',

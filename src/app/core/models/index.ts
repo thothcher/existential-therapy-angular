@@ -42,11 +42,29 @@ export interface Work {
   year: number;
 }
 
+/**
+ * A freely licensed portrait. Several carry CC BY / CC BY-SA terms, so the
+ * credit line is part of the data rather than an afterthought — the detail
+ * page prints it under the image.
+ */
+export interface Portrait {
+  /** Path under /thinkers, e.g. '/thinkers/sartre.jpg'. */
+  src: string;
+  /** Photographer or artist, as Wikimedia Commons records them. */
+  credit: string;
+  /** Short licence name, e.g. 'CC BY-SA 3.0' or 'Public domain'. */
+  license: string;
+  /** The Commons file page, so the claim can be checked. */
+  source: string;
+}
+
 export interface Thinker {
   id: string;
   slug: string;
-  /** Seed for the generated abstract plate; see PlateComponent. */
+  /** Seed for the generated abstract plate, used wherever no portrait exists. */
   plate: number;
+  /** Portrait, when a freely licensed one exists; the plate covers the rest. */
+  portrait?: Portrait;
   name: Bilingual;
   latin: string;
   birthYear: number;

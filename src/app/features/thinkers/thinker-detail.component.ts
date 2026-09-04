@@ -50,8 +50,21 @@ import { RevealDirective } from '../../shared/directives/reveal.directive';
         </div>
         <div class="split-narrow">
           <div class="plate" style="aspect-ratio:4/5">
-            <app-plate [seed]="t.plate" [label]="i18n.pick(t.name)" />
+            @if (t.portrait; as portrait) {
+              <img [src]="portrait.src"
+                   [alt]="i18n.t('thinkers.portraitAlt', { name: i18n.pick(t.name) })"
+                   width="640" height="800" decoding="async" />
+            } @else {
+              <app-plate [seed]="t.plate" [label]="i18n.pick(t.name)" />
+            }
           </div>
+          @if (t.portrait; as portrait) {
+            <p class="t-micro plate-credit">
+              <a [href]="portrait.source" target="_blank" rel="noopener noreferrer">
+                {{ i18n.t('thinkers.credit', { credit: portrait.credit, license: portrait.license }) }}
+              </a>
+            </p>
+          }
         </div>
       </div>
     </div>

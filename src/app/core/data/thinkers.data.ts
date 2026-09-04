@@ -3,13 +3,18 @@
 
    Shape mirrors the CBT `Psychologist` model (slug routing, biography split on
    \n\n, keyIdeas / works / contributions / tags), with two changes: every
-   translatable field is a { ka, en } pair, and there is no `images` array.
+   translatable field is a { ka, en } pair, and portraits are a single
+   credited `portrait` object rather than an `images` array.
 
    The CBT platform illustrated its psychologists with unrelated Unsplash
-   photographs of strangers, which quietly implies a portrait. Here each
-   thinker carries a `plate` seed instead, and js/pages/plate.js renders a
-   deterministic abstract composition from it — honest, distinctive, and
-   consistent with the atmospheric imagery elsewhere.
+   photographs of strangers, which quietly implies a portrait it never was.
+   Here each thinker carries a real one: `portrait` points at a public-domain
+   or freely licensed photograph from Wikimedia Commons, stored under
+   public/thinkers and credited in the data so the licence travels with the
+   image. The `plate` seed stays as the fallback — PlateComponent renders a
+   deterministic abstract composition from it wherever no free portrait
+   exists, and the plate gradient is what shows behind an image while it
+   loads.
    ========================================================================== */
 
 import type { Thinker } from '../models';
@@ -19,6 +24,12 @@ export const THINKERS: Thinker[] = [
     id: 'kierkegaard',
     slug: 'kierkegaard',
     plate: 11,
+    portrait: {
+      src: '/thinkers/kierkegaard.jpg',
+      credit: 'Luplau Janssen',
+      license: 'Public domain',
+      source: 'https://commons.wikimedia.org/wiki/File:Kierkegaard_portrait.jpg'
+    },
     name: { ka: 'სორენ კირკეგორი', en: 'Søren Kierkegaard' },
     latin: 'Søren Kierkegaard',
     birthYear: 1813,
@@ -62,6 +73,12 @@ export const THINKERS: Thinker[] = [
     id: 'heidegger',
     slug: 'heidegger',
     plate: 23,
+    portrait: {
+      src: '/thinkers/heidegger.jpg',
+      credit: 'Willy Pragher',
+      license: 'CC BY-SA 3.0',
+      source: 'https://commons.wikimedia.org/wiki/File:Heidegger_2_(1960).jpg'
+    },
     name: { ka: 'მარტინ ჰაიდეგერი', en: 'Martin Heidegger' },
     latin: 'Martin Heidegger',
     birthYear: 1889,
@@ -104,6 +121,12 @@ export const THINKERS: Thinker[] = [
     id: 'sartre',
     slug: 'sartre',
     plate: 37,
+    portrait: {
+      src: '/thinkers/sartre.jpg',
+      credit: 'Anefo / unknown photographer',
+      license: 'CC BY-SA 3.0 NL',
+      source: 'https://commons.wikimedia.org/wiki/File:Jean_Paul_Sartre_1965.jpg'
+    },
     name: { ka: 'ჟან-პოლ სარტრი', en: 'Jean-Paul Sartre' },
     latin: 'Jean-Paul Sartre',
     birthYear: 1905,
@@ -146,6 +169,12 @@ export const THINKERS: Thinker[] = [
     id: 'beauvoir',
     slug: 'beauvoir',
     plate: 41,
+    portrait: {
+      src: '/thinkers/beauvoir.png',
+      credit: 'Moshe Milner',
+      license: 'CC BY-SA 3.0',
+      source: 'https://commons.wikimedia.org/wiki/File:Simone_de_Beauvoir2.png'
+    },
     name: { ka: 'სიმონ დე ბოვუარი', en: 'Simone de Beauvoir' },
     latin: 'Simone de Beauvoir',
     birthYear: 1908,
@@ -188,6 +217,12 @@ export const THINKERS: Thinker[] = [
     id: 'binswanger',
     slug: 'binswanger',
     plate: 53,
+    portrait: {
+      src: '/thinkers/binswanger.jpg',
+      credit: 'Franz Vältl',
+      license: 'Public domain',
+      source: 'https://commons.wikimedia.org/wiki/File:Ludwig_Binswanger_(1911).jpg'
+    },
     name: { ka: 'ლუდვიგ ბინსვანგერი', en: 'Ludwig Binswanger' },
     latin: 'Ludwig Binswanger',
     birthYear: 1881,
@@ -230,6 +265,12 @@ export const THINKERS: Thinker[] = [
     id: 'frankl',
     slug: 'frankl',
     plate: 67,
+    portrait: {
+      src: '/thinkers/frankl.jpg',
+      credit: 'Prof. Dr. Franz Vesely',
+      license: 'CC BY-SA 3.0 DE',
+      source: 'https://commons.wikimedia.org/wiki/File:Viktor_Frankl2_(cropped).jpg'
+    },
     name: { ka: 'ვიქტორ ფრანკლი', en: 'Viktor Frankl' },
     latin: 'Viktor E. Frankl',
     birthYear: 1905,
@@ -273,6 +314,12 @@ export const THINKERS: Thinker[] = [
     id: 'may',
     slug: 'may',
     plate: 71,
+    portrait: {
+      src: '/thinkers/may.jpg',
+      credit: 'Unknown photographer',
+      license: 'Public domain',
+      source: 'https://commons.wikimedia.org/wiki/File:Rollo_May_USD_Alcal%C3%A1_1977.jpg'
+    },
     name: { ka: 'როლო მეი', en: 'Rollo May' },
     latin: 'Rollo May',
     birthYear: 1909,
@@ -316,6 +363,12 @@ export const THINKERS: Thinker[] = [
     id: 'yalom',
     slug: 'yalom',
     plate: 83,
+    portrait: {
+      src: '/thinkers/yalom.jpg',
+      credit: 'Haemmerli',
+      license: 'CC BY-SA 4.0',
+      source: 'https://commons.wikimedia.org/wiki/File:Irvin_Yalom.jpg'
+    },
     name: { ka: 'ირვინ იალომი', en: 'Irvin Yalom' },
     latin: 'Irvin D. Yalom',
     birthYear: 1931,
@@ -360,6 +413,12 @@ export const THINKERS: Thinker[] = [
     id: 'vandeurzen',
     slug: 'van-deurzen',
     plate: 97,
+    portrait: {
+      src: '/thinkers/van-deurzen.jpg',
+      credit: 'Astarkind',
+      license: 'CC BY-SA 4.0',
+      source: 'https://commons.wikimedia.org/wiki/File:EmmyvanDeurzen.jpg'
+    },
     name: { ka: 'ემი ვან დორზენი', en: 'Emmy van Deurzen' },
     latin: 'Emmy van Deurzen',
     birthYear: 1951,

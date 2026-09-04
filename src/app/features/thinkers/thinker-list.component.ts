@@ -68,7 +68,14 @@ import type { Thinker } from '../../core/models';
     @for (thinker of results(); track thinker.slug; let i = $index) {
       <a class="thinker-item group" [routerLink]="['/thinkers', thinker.slug]"
          appReveal [appRevealDelay]="(i % 6) * 70">
-        <div class="plate plate-hover"><app-plate [seed]="thinker.plate" /></div>
+        <div class="plate plate-hover">
+          @if (thinker.portrait; as portrait) {
+            <img [src]="portrait.src" alt="" aria-hidden="true"
+                 width="480" height="600" loading="lazy" decoding="async" />
+          } @else {
+            <app-plate [seed]="thinker.plate" />
+          }
+        </div>
         <p class="t-micro">{{ years(thinker) }} · {{ i18n.pick(thinker.origin) }}</p>
         <h2 class="t-subtitle" style="margin-top:.3rem">{{ i18n.pick(thinker.name) }}</h2>
         <p class="t-micro" style="margin-top:.2rem;color:var(--accent)">
