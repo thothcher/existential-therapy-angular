@@ -19,6 +19,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { I18nService } from '../../core/services/i18n.service';
 import { StoreService, CollectionName } from '../../core/services/store.service';
+import { ConfirmService } from '../../core/services/confirm.service';
 import { AuthService } from '../../core/services/auth.service';
 import { IconComponent } from '../../shared/components/icon.component';
 import type { Bilingual } from '../../core/models';
@@ -212,6 +213,7 @@ const STAT_KEYS: { name: CollectionName; key: string }[] = [
 export class AdminComponent {
   protected readonly i18n = inject(I18nService);
   protected readonly store = inject(StoreService);
+  private readonly confirm = inject(ConfirmService);
   protected readonly auth = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
 
@@ -257,8 +259,15 @@ export class AdminComponent {
     this.closeEditor();
   }
 
-  protected resetSeed(): void {
-    if (!confirm(this.i18n.t('admin.resetConfirm'))) return;
+  protected async resetSeed(): Promise<void> {
+    const confirmed = await this.confirm.ask({
+      title: this.i18n.t('admin.resetTitle'),
+      message: this.i18n.t('admin.resetConfirm'),
+      confirmLabel: this.i18n.t('common.delete'),
+      cancelLabel: this.i18n.t('common.cancel'),
+      icon: 'rotate-ccw'
+    });
+    if (!confirmed) return;
     this.store.resetOverrides();
   }
 }

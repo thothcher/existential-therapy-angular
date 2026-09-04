@@ -778,6 +778,69 @@ textarea.field { min-height: 7rem; resize: vertical; line-height: 1.6; }
   font-weight: 500;
 }
 
+/* Confirm dialog. A native <dialog> in the top layer, so no z-index against
+   the drawer (150) or the sticky header, and the scrim is ::backdrop rather
+   than an element. Literal rgba there, matching .drawer-scrim: ::backdrop only
+   inherits custom properties in recent browsers, and a scrim that silently
+   loses its colour is a scrim that is not there. */
+.modal {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  padding: 1.25rem;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.modal:not([open]) { display: none; }
+.modal::backdrop {
+  background: rgba(11, 15, 20, 0.45);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: fade-in var(--dur-mid) var(--ease) both;
+}
+.modal-panel {
+  width: min(27rem, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 1.75rem;
+  border-radius: var(--r-lg);
+  background: var(--elevated);
+  box-shadow: var(--shadow-pop), var(--ring-inset);
+  animation: pop-in var(--dur-mid) var(--ease) both;
+}
+.modal-head { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 0.85rem; }
+.modal-head h2 { font-size: 1.0625rem; }
+/* The palette carries one hue, so a destructive question is marked by a glyph
+   and by its wording, never by turning something red. */
+.modal-glyph {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+.modal-actions .btn { flex: 1 1 auto; }
+@media (min-width: 26rem) { .modal-actions .btn { flex: 0 0 auto; } }
+
+@keyframes pop-in { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { transform: none; } }
+
 @keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slide-in { from { transform: translateX(14px); opacity: 0; } to { transform: none; opacity: 1; } }
 

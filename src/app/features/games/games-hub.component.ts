@@ -10,6 +10,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { RouterLink } from '@angular/router';
 import { I18nService } from '../../core/services/i18n.service';
 import { StoreService } from '../../core/services/store.service';
+import { ConfirmService } from '../../core/services/confirm.service';
 import { IconComponent } from '../../shared/components/icon.component';
 import { RevealDirective } from '../../shared/directives/reveal.directive';
 import { GAMES } from './games.catalogue';
@@ -92,6 +93,7 @@ const CIRCUMFERENCE = 339.292;
 export class GamesHubComponent {
   protected readonly i18n = inject(I18nService);
   protected readonly store = inject(StoreService);
+  private readonly confirm = inject(ConfirmService);
   protected readonly games = GAMES;
   protected readonly circumference = CIRCUMFERENCE;
 
@@ -107,8 +109,15 @@ export class GamesHubComponent {
     return (CIRCUMFERENCE - (CIRCUMFERENCE * this.percent(best, total)) / 100).toFixed(1);
   }
 
-  protected reset(): void {
-    if (!confirm(this.i18n.t('games.progress.resetConfirm'))) return;
+  protected async reset(): Promise<void> {
+    const confirmed = await this.confirm.ask({
+      title: this.i18n.t('games.progress.resetTitle'),
+      message: this.i18n.t('games.progress.resetConfirm'),
+      confirmLabel: this.i18n.t('common.delete'),
+      cancelLabel: this.i18n.t('common.cancel'),
+      icon: 'trash-2'
+    });
+    if (!confirmed) return;
     this.store.resetProgress();
   }
 }

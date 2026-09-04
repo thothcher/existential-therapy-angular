@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header.component';
 import { FooterComponent } from './shared/components/footer.component';
+import { ConfirmDialogComponent } from './shared/components/confirm-dialog.component';
 import { I18nService } from './core/services/i18n.service';
 import { ThemeService } from './core/services/theme.service';
 import { SeoService } from './core/services/seo.service';
@@ -16,7 +17,7 @@ import { SeoService } from './core/services/seo.service';
 @Component({
   selector: 'app-root',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, ConfirmDialogComponent],
   template: `
     <a class="skip-link" href="#main">{{ i18n.t('nav.skip') }}</a>
     <app-header />
@@ -24,6 +25,9 @@ import { SeoService } from './core/services/seo.service';
       <router-outlet />
     </main>
     <app-footer />
+
+    <!-- Mounted once here so any feature can ask a question. -->
+    <app-confirm-dialog />
   `,
   styles: [':host { display: contents; }']
 })
