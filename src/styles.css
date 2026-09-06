@@ -882,6 +882,14 @@ textarea.field { min-height: 7rem; resize: vertical; line-height: 1.6; }
 @keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slide-in { from { transform: translateX(14px); opacity: 0; } to { transform: none; opacity: 1; } }
 
+/* The drawer's exit, mirroring the two above. Scoped under .is-closing so it
+   only overrides the entrance animation while the header is playing the
+   drawer closed; see the [hidden]/(animationend) handling on .drawer. */
+.drawer.is-closing .drawer-scrim  { animation: fade-out var(--dur-mid) var(--ease) both; }
+.drawer.is-closing .drawer-panel { animation: slide-out var(--dur-mid) var(--ease) both; }
+@keyframes fade-out  { from { opacity: 1; } to { opacity: 0; } }
+@keyframes slide-out { from { transform: none; opacity: 1; } to { transform: translateX(14px); opacity: 0; } }
+
 /* Overflow popover in the desktop bar */
 .more-wrap { position: relative; }
 .more-btn { display: inline-flex; align-items: center; gap: 0.3rem; }

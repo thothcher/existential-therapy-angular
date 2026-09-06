@@ -135,8 +135,12 @@ export const NAV_ALL = [...NAV_PRIMARY, ...NAV_MORE];
   </div>
 </header>
 
-<!-- A real overlay panel, not the push-down block the CBT header used. -->
-<div class="drawer" id="siteDrawer" [hidden]="!drawerOpen()" #drawer>
+<!-- A real overlay panel, not the push-down block the CBT header used.
+     [hidden] maps to display:none, which can't be transitioned — so closing
+     stayed visible through .is-closing (which swaps in the reverse keyframes)
+     until the panel's own slide-out animation reports finished. -->
+<div class="drawer" id="siteDrawer" [hidden]="!drawerOpen() && !drawerClosing()"
+     [class.is-closing]="drawerClosing()" (animationend)="onDrawerAnimationEnd($event)" #drawer>
   <div class="drawer-scrim" (click)="closeDrawer()"></div>
   <div class="drawer-panel" role="dialog" aria-modal="true"
        [attr.aria-label]="i18n.t('nav.primary')">
@@ -202,6 +206,8 @@ export class HeaderComponent {
   protected readonly scrolled = signal(false);
   protected readonly moreOpen = signal(false);
   protected readonly drawerOpen = signal(false);
+  /** True for exactly as long as the close animation is playing. */
+  protected readonly drawerClosing = signal(false);
 
   private readonly moreBtn = viewChild<ElementRef<HTMLButtonElement>>('moreBtn');
   private readonly morePanel = viewChild<ElementRef<HTMLElement>>('morePanel');
@@ -240,6 +246,7 @@ export class HeaderComponent {
   /* ---- drawer ------------------------------------------------------------ */
 
   protected openDrawer(): void {
+    this.drawerClosing.set(false);   // reopening mid-close cancels the exit
     this.drawerOpen.set(true);
     if (!this.isBrowser) return;
     this.doc.body.style.overflow = 'hidden';   // scroll lock, absent in the original
@@ -252,11 +259,19 @@ export class HeaderComponent {
   protected closeDrawer(): void {
     if (!this.drawerOpen()) return;
     this.drawerOpen.set(false);
+    this.drawerClosing.set(true);   // keeps the panel unhidden through its exit
     if (!this.isBrowser) return;
     this.doc.body.style.overflow = '';
     this.releaseFocus?.();
     this.releaseFocus = null;
     this.drawerBtn()?.nativeElement.focus();
+  }
+
+  /** [hidden] re-engages once the panel — not the scrim — finishes sliding out. */
+  protected onDrawerAnimationEnd(event: AnimationEvent): void {
+    if (event.animationName === 'slide-out' && this.drawerClosing()) {
+      this.drawerClosing.set(false);
+    }
   }
 
   /* ---- global keys and outside clicks ------------------------------------ */
