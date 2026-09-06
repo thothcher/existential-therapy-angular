@@ -36,7 +36,7 @@ import type { LexiconTerm } from '../../core/models';
     <div class="filter-bar" style="margin-top:2.5rem">
       <div class="search-wrap">
         <app-icon name="search" cls="icon-sm" />
-        <input type="search" class="field"
+        <input type="text" class="field"
                [placeholder]="i18n.t('lexicon.searchHint')"
                [attr.aria-label]="i18n.t('common.search')"
                [value]="rawQuery()" (input)="onSearch($event)">
