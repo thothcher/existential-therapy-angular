@@ -53,7 +53,7 @@ export const CURRICULUM: CourseModule[] = [
         kind: 'visit',
         title: { ka: 'დაუდგით გვერდიგვერდ კბთ-ს', en: 'Put it beside CBT' },
         body: {
-          ka: 'ყველაზე სწრაფად ის იკვეთება, რასაც სხვას ადარებ. კბთ ყველაზე ახლო მეზობელია და ყველაზე ხშირად აირევა ხოლმე მასთან. გადახედეთ შედარებას — განსაკუთრებით იმ სტრიქონებს, სადაც ორივე ერთსა და იმავეს აკეთებს სხვადასხვა მიზნით.',
+          ka: 'ყველაზე სწრაფად მაშინ იკვეთება, როდესაც სხვას ადარებ. კბთ ყველაზე ახლო მეზობელია და ყველაზე ხშირად ეშლებათ ხოლმე მასთან. გადახედეთ შედარებას — განსაკუთრებით იმ სტრიქონებს, სადაც ორივე ერთსა და იმავეს აკეთებს სხვადასხვა მიზნით.',
           en: 'A thing shows its shape fastest beside something else. CBT is the nearest neighbour and the one it is most often confused with. Read the comparison — particularly the rows where both do the same thing for different reasons.'
         },
         link: { path: '/vs-cbt', label: { ka: 'შედარება კბთ-სთან', en: 'The comparison with CBT' } }
@@ -153,14 +153,14 @@ export const CURRICULUM: CourseModule[] = [
             text: { ka: 'იზოლაცია', en: 'Isolation' },
             correct: true,
             why: {
-              ka: 'დიახ — და კონკრეტულად ეგზისტენციალური იზოლაცია, რომელიც მარტოობა არ არის. ის ცოლთან ერთადაა და მაინც გადაულახავია მანძილი. სწორედ ეს გამორჩევს მას ურთიერთობის პრობლემისგან.',
+              ka: 'დიახ — და კონკრეტულად ეგზისტენციალური იზოლაცია, რომელიც მარტოობა არ არის. ის ცოლთან ერთადაა და მაინც გადაულახავი მანძილია. სწორედ ეს გამორჩევს მას ურთიერთობის პრობლემისგან.',
               en: 'Yes — and specifically existential isolation, which is not loneliness. He is with his wife and the gap is still unbridgeable. That is exactly what separates it from a relationship problem.'
             }
           },
           {
             text: { ka: 'უაზრობა', en: 'Meaninglessness' },
             why: {
-              ka: 'ახლოა, რადგან ორივე ცარიელ განცდას იძლევა. მაგრამ აქ საქმე იმაზეა, რომ ვერ ხედავენ — და არა იმაზე, რომ არაფერს აქვს ღირებულება.',
+              ka: 'ახლოა, რადგან ორივე ცარიელ განცდას იძლევა. მაგრამ აქ საქმე იმაშია, რომ ვერ ხედავენ — და არა იმაში, რომ არაფერს აქვს ღირებულება.',
               en: 'Close, since both leave an empty feeling. But the trouble here is not being seen, rather than nothing having any worth.'
             }
           },
@@ -178,7 +178,7 @@ export const CURRICULUM: CourseModule[] = [
         kind: 'visit',
         title: { ka: 'გაწაფეთ თვალი', en: 'Train the eye' },
         body: {
-          ka: 'ცნობა ვარჯიშია და არა ცოდნა. სავარჯიშოში თექვსმეტი ნათქვამია — თითოეული ერთ მოცემულობას ეკუთვნის. დაახარისხეთ ისინი. თუ პირველად შეცდომებს დაუშვებთ, სწორედ ესაა საჭირო ნაწილი.',
+          ka: 'ცნობა ვარჯიშია და არა ცოდნა. სავარჯიშოში თექვსმეტი ტექსტია — თითოეული ერთ მოცემულობას ეკუთვნის. დაახარისხეთ ისინი. პირველად შეცდომებს თუ დაუშვებთ, სწორედ ესაა საჭირო.',
           en: 'Recognition is a drill, not a fact. The exercise has sixteen statements, each belonging to one given. Sort them. If you get several wrong the first time, that is the part that does the work.'
         },
         link: { path: '/games/givens', label: { ka: 'ოთხი მოცემულობის დახარისხება', en: 'Sorting the four givens' } }
