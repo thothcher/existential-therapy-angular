@@ -433,6 +433,13 @@ button { background: none; border: 0; cursor: pointer; }
    -------------------------------------------------------------------------- */
 
 .card {
+  /* Every other .card is a <div>, block by default, so this went unnoticed
+     until an <a class="card"> — the scenario preview link — carried several
+     block-level children (a flex row, an h3, a p, a link span). An inline
+     element wrapping more than one block child gets its background painted
+     per line fragment rather than as one box, which is what split the
+     scenario cards into a stray sliver above unstyled, unboxed text. */
+  display: block;
   background: var(--surface);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-soft), var(--ring-inset);
