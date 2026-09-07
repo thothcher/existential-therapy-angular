@@ -1,0 +1,18 @@
+# Netlify build + functions.
+#
+# The site itself stays a static prerendered bundle — `publish` points at the
+# browser output `ng build` already produces. The only server-side code is the
+# chat proxy, which exists solely to keep the Anthropic key out of that bundle.
+
+[build]
+  command  = "npm run build"
+  publish  = "dist/existential-therapy-angular/browser"
+
+[functions]
+  directory = "netlify/functions"
+  # esbuild resolves the TypeScript imports the function makes into src/, so the
+  # personas are built from the same data files the site renders.
+  node_bundler = "esbuild"
+
+# No redirect rule for /api/chat: the function declares its own path via the
+# `config` export in netlify/functions/chat.mts.

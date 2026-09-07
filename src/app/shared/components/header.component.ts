@@ -44,6 +44,7 @@ export const NAV_PRIMARY: NavLink[] = [
 
 /** The reference tools: one click behind "more", and listed in full in the drawer. */
 export const NAV_MORE: NavLink[] = [
+  { path: '/chat',      key: 'nav.chat',      icon: 'message-circle' },
   { path: '/scenarios', key: 'nav.scenarios', icon: 'quote' },
   { path: '/lexicon',   key: 'nav.lexicon',   icon: 'book-open' },
   { path: '/inventory', key: 'nav.inventory', icon: 'notebook-pen' },

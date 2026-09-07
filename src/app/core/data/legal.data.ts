@@ -15,8 +15,8 @@ export const PRIVACY: LegalSection[] = [
   {
     heading: { ka: 'მოკლედ', en: 'In short' },
     body: {
-      ka: 'ამ პლატფორმას სერვერი არ ჰყავს. ის სტატიკური გვერდების ერთობლიობაა და თქვენს შესახებ არაფერს არ აგროვებს, არ გზავნის და არ ინახავს საკუთარ ბაზაში — რადგან ბაზა არ არსებობს.',
-      en: 'This platform has no server. It is a set of static pages, and it collects nothing about you, sends nothing anywhere, and stores nothing in a database of its own — because there is no database.'
+      ka: 'ეს პლატფორმა სტატიკური გვერდების ერთობლიობაა. მას მონაცემთა ბაზა არ აქვს, ანგარიშებს არ ინახავს და თქვენს შესახებ არაფერს არ აგროვებს. ერთადერთი გამონაკლისი სავარჯიშო საუბრის გვერდია: იქ დაწერილი ტექსტი პასუხის მისაღებად იგზავნება Anthropic-ის სერვისში. ამის გარდა, საიტიდან არსად არაფერი მიდის.',
+      en: 'This platform is a set of static pages. It has no database, keeps no accounts, and collects nothing about you. There is one exception: the practice conversation page, where what you write is sent to Anthropic\'s service to produce a reply. Apart from that, nothing leaves the site.'
     }
   },
   {
@@ -31,6 +31,8 @@ export const PRIVACY: LegalSection[] = [
         'სავარჯიშოების პროგრესი: საუკეთესო შედეგი და მცდელობების რაოდენობა.',
         'სცენარებთან დაწერილი თქვენი რეფლექსიის ჩანაწერები.',
         'აზრის ინვენტარის ჩანაწერები — მაქსიმუმ ოცი უახლესი.',
+        'კურსის პროგრესი: რომელი ნაბიჯები გაიარეთ.',
+        'მიმდინარე სავარჯიშო საუბარი, სანამ თავად არ წაშლით.',
         'დემონსტრაციული პროფილი, თუ ის შექმენით: სახელი და ელფოსტა. პაროლი არასდროს იკითხება.'
       ],
       en: [
@@ -38,6 +40,8 @@ export const PRIVACY: LegalSection[] = [
         'Exercise progress: best score and number of attempts.',
         'Any reflection notes you write alongside the scenarios.',
         'Meaning-inventory entries — the twenty most recent.',
+        'Course progress: which steps you have finished.',
+        'The current practice conversation, until you delete it yourself.',
         'A demonstration profile, if you create one: a name and an email. No password is ever asked for.'
       ]
     }
@@ -54,6 +58,13 @@ export const PRIVACY: LegalSection[] = [
     body: {
       ka: 'გვერდები იყენებს შრიფტებს Google Fonts-იდან, CSS-ის ბიბლიოთეკას jsDelivr-იდან და ატმოსფერულ სურათებს Unsplash-იდან. ამ რესურსების ჩამოტვირთვისას თქვენი ბრაუზერი ამ სერვისებს უკავშირდება და ისინი, ჩვეულებისამებრ, ხედავენ თქვენს IP მისამართს. ჩვენ ამ ინფორმაციას არ ვიღებთ. ანალიტიკა, სარეკლამო სკრიპტები და თვალთვალის ქუქიები არ გვაქვს.',
       en: 'The pages load fonts from Google Fonts, a CSS library from jsDelivr, and atmospheric images from Unsplash. Fetching those resources means your browser contacts those services, and they will see your IP address as they normally would. We receive none of that. There is no analytics, no advertising script and no tracking cookie.'
+    }
+  },
+  {
+    heading: { ka: 'სავარჯიშო საუბარი', en: 'The practice conversation' },
+    body: {
+      ka: 'ამ გვერდზე დაწერილი ტექსტი პასუხის მისაღებად იგზავნება Anthropic-ის სერვისში (Claude). გადაცემა ხდება ჩვენი ფუნქციის გავლით, რომელიც მხოლოდ შუამავალია — ის საუბარს არ ინახავს და არსად არ წერს. თავად საუბარი ინახება მხოლოდ თქვენს ბრაუზერში და შეგიძლიათ ნებისმიერ დროს წაშალოთ ღილაკით „ახალი საუბარი".\n\nრადგან ტექსტი მესამე მხარეს გადაეცემა, არ დაწეროთ იქ ის, რისი გაზიარებაც არ გსურთ — სახელები, საკონტაქტო ინფორმაცია ან სხვისი ამბები. Anthropic-ის მიერ მონაცემების დამუშავებას მისივე პირობები არეგულირებს.',
+      en: 'What you write on that page is sent to Anthropic\'s service (Claude) to produce a reply. It travels through a function of ours that acts only as a relay — it does not store the conversation or write it down anywhere. The conversation itself is kept only in your browser, and you can delete it at any time with the "New conversation" button.\n\nBecause the text does reach a third party, do not write anything there you would not want shared — names, contact details, or somebody else\'s story. Anthropic\'s own terms govern what they do with it.'
     }
   },
   {
@@ -78,6 +89,13 @@ export const TERMS: LegalSection[] = [
     body: {
       ka: 'აქ მოცემული არაფერი არ არის სამედიცინო, ფსიქოლოგიური ან დიაგნოსტიკური რჩევა. ეს მასალა არ ცვლის კვალიფიციურ სპეციალისტთან შეხვედრას და არც პროფესიულ განათლებას. თუ თქვენ ან ვინმეს თქვენს გარშემო უჭირს, მიმართეთ სპეციალისტს; მწვავე კრიზისის შემთხვევაში — გადაუდებელ სამსახურს.',
       en: 'Nothing here is medical, psychological or diagnostic advice. This material replaces neither a meeting with a qualified professional nor professional training. If you or someone near you is struggling, speak to a professional; in an acute crisis, contact emergency services.'
+    }
+  },
+  {
+    heading: { ka: 'საუბარი ხელოვნურ ინტელექტთან', en: 'The conversation is with an AI' },
+    body: {
+      ka: 'სავარჯიშო საუბრის გვერდზე თანამოსაუბრე ენობრივი მოდელია (Anthropic-ის Claude) და არა ადამიანი. ის არ არის თერაპევტი, არ არის ექიმი და არ არის ლიცენზირებული სპეციალისტი. ის ვერ სვამს დიაგნოზს, ვერ ნიშნავს მკურნალობას და ვერ იღებს პასუხისმგებლობას თქვენზე.\n\nეს დემონსტრაციაა — გზა იმის საგრძნობად, როგორ მიმდინარეობს ასეთი საუბარი. ის არ არის თერაპია და მას ვერ ჩაანაცვლებს. მოდელი შეიძლება შეცდეს, გაიმეოროს სტერეოტიპი ან თქვას ის, რაც თქვენს ვითარებას არ შეესაბამება.\n\nთუ საუბარში კრიზისის ნიშანი გამოჩნდება, გვერდი შეწყვეტს პერსონაჟში ყოფნას და დახმარების კონტაქტებს გაჩვენებთ. ეს ავტომატური მექანიზმია და მასზე დაყრდნობა არ შეიძლება: ის ყველაფერს ვერ ამოიცნობს. თუ გიჭირთ, მიმართეთ ცოცხალ სპეციალისტს.',
+      en: 'On the practice conversation page you are talking to a language model (Anthropic\'s Claude), not to a person. It is not a therapist, not a doctor, and not a licensed professional of any kind. It cannot diagnose, cannot prescribe, and carries no responsibility for you.\n\nIt is a demonstration — a way to feel how such a conversation moves. It is not therapy and does not replace it. The model can be wrong, can repeat a stereotype, and can say something that does not fit your situation at all.\n\nIf a sign of crisis appears, the page stops holding the character and shows contacts for help instead. That is an automatic mechanism and it must not be relied upon: it will not catch everything. If you are struggling, speak to a person.'
     }
   },
   {

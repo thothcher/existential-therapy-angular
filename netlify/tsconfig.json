@@ -1,0 +1,16 @@
+{
+  "//": "tsconfig.app.json only includes src/**, so the function would otherwise be unchecked. Its imports into src/ are type-only plus two data files.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": ["**/*.mts", "../src/app/core/data/**/*.ts", "../src/app/core/models/**/*.ts"]
+}

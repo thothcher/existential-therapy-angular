@@ -17,6 +17,13 @@ export const routes: Routes = [
     data: { titleKey: 'meta.home', descKey: 'meta.desc.home' }
   },
 
+  /* ---- the practice conversation --------------------------------------- */
+  {
+    path: 'chat',
+    loadComponent: () => import('./features/chat/chat.component').then(m => m.ChatComponent),
+    data: { titleKey: 'meta.chat', descKey: 'chat.lead' }
+  },
+
   /* ---- the course ------------------------------------------------------ */
   {
     path: 'learn',

@@ -321,6 +321,22 @@ const FEATURED_THINKERS = ['frankl', 'yalom', 'heidegger', 'may', 'sartre', 'kie
   </div>
 </section>
 
+<!-- ================= the conversation ================= -->
+<section class="section">
+  <div class="wrap">
+    <div class="resume" appReveal="fade">
+      <div>
+        <p class="t-eyebrow"><span>{{ i18n.t('chat.eyebrow') }}</span></p>
+        <h2 class="t-subtitle" style="margin-top:.6rem">{{ i18n.t('chat.title') }}</h2>
+        <p class="t-body muted measure" style="margin-top:.5rem">{{ i18n.t('chat.lead') }}</p>
+      </div>
+      <a class="btn btn-primary" routerLink="/chat">
+        {{ i18n.t('chat.begin') }}<app-icon name="arrow-right" cls="icon-sm" />
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- ================= closing ================= -->
 <section class="section">
   <div class="wrap">
