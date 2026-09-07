@@ -2060,30 +2060,136 @@ textarea.field { min-height: 7rem; resize: vertical; line-height: 1.6; }
 
 /* ---- composer ----------------------------------------------------------- */
 
+/* One shell holding the field and its control, rather than a field with a
+   button parked beside it. The whole box takes the focus ring, so the thing
+   that lights up is the thing you are writing in. */
 .chat-composer {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.75rem;
-  align-items: end;
   margin-top: 1.5rem;
+  padding: 0.9rem 1rem 0.75rem;
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  box-shadow: var(--ring-inset);
+  transition: box-shadow var(--dur-fast) var(--ease-soft), background-color var(--dur-fast) var(--ease-soft);
 }
-.chat-composer textarea.field {
-  min-height: 3.25rem;
-  max-height: 12rem;
-  resize: none;
-}
-@media (max-width: 520px) {
-  .chat-composer { grid-template-columns: minmax(0, 1fr); }
-  .chat-composer .btn { width: 100%; }
+.chat-composer:focus-within {
+  background: var(--surface);
+  box-shadow: 0 0 0 2px var(--accent-ring), var(--ring-inset);
 }
 
-.chat-foot {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.5rem 1rem;
-  margin-top: 0.75rem;
+/* Deliberately not .field: the shell owns the surface and the ring, so the
+   field itself has to be invisible furniture. */
+.chat-input {
+  display: block;
+  width: 100%;
+  min-height: 4.5rem;
+  max-height: 18rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-strong);
+  font: inherit;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  resize: none;
+  overflow-y: auto;
 }
+.chat-input:focus { outline: none; box-shadow: none; }
+.chat-input::placeholder { color: var(--text-faint); }
+.chat-input:disabled { cursor: not-allowed; }
+
+.chat-composer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--hairline);
+}
+@media (max-width: 560px) {
+  /* The keyboard hint is desktop advice; on a phone it is only noise. */
+  .chat-composer-bar > .t-micro { display: none; }
+  .chat-composer-bar { justify-content: flex-end; }
+}
+
+/* ---- layout: conversation, with its history beside it ------------------- */
+
+.chat-layout { display: grid; gap: 2rem; }
+@media (min-width: 1000px) {
+  /* Rail first, as in every chat client anyone has used. */
+  .chat-layout { grid-template-columns: 17rem minmax(0, 1fr); gap: 3rem; align-items: start; }
+  .chat-rail { position: sticky; top: 6rem; }
+}
+
+.chat-rail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.chat-new {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 0.85rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  box-shadow: var(--ring-inset);
+  color: var(--text-strong);
+  font-size: var(--fs-micro);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-soft);
+}
+.chat-new:hover { background: var(--accent-soft); color: var(--accent); }
+
+.chat-list { list-style: none; margin: 0.6rem 0 0; padding: 0; display: grid; gap: 0.3rem; }
+.chat-list-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  border-radius: var(--r-sm);
+  transition: background-color var(--dur-fast) var(--ease-soft);
+}
+.chat-list-item:hover { background: var(--surface-2); }
+.chat-list-item.is-active { background: var(--accent-soft); }
+
+.chat-list-open {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: 0.6rem 0.7rem;
+  text-align: start;
+  cursor: pointer;
+}
+/* One line each: a title that wraps would make the rail a second transcript. */
+.chat-list-open > span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.chat-list-item.is-active .chat-list-open .strong { color: var(--accent); }
+
+/* Quiet rather than hidden. Revealing it on hover would read better on a
+   desktop and leave it unreachable anywhere hover is not real — a media query
+   is a worse guarantee than simply always drawing the control. */
+.chat-list-del {
+  width: 2rem;
+  height: 2rem;
+  margin-inline-end: 0.3rem;
+  color: var(--text-faint);
+  opacity: 0.5;
+  transition: opacity var(--dur-fast) var(--ease-soft), color var(--dur-fast) var(--ease-soft);
+}
+.chat-list-item:hover .chat-list-del,
+.chat-list-del:focus-visible { opacity: 1; }
+.chat-list-del:hover { color: var(--text-strong); opacity: 1; }
 
 /* ---- crisis ------------------------------------------------------------- */
 

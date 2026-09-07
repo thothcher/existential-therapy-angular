@@ -1,9 +1,14 @@
 /* ==========================================================================
-   chat.service.ts — the conversation, and the stream that feeds it.
+   chat.service.ts — the conversations, and the stream that feeds them.
 
    Talks to /api/chat, never to Anthropic. The key lives in the Netlify
    function; this side sends a mode, a language and at most a scenario id, and
    reads SSE frames back.
+
+   Conversations are kept, not overwritten. "New conversation" starts another
+   one and leaves the last where it was — the earlier build deleted it, which
+   meant the only way to begin again was to destroy what you had just done.
+   Deleting is now its own deliberate act, per conversation.
 
    Three things here are load-bearing and easy to get wrong:
 
@@ -11,8 +16,8 @@
       reader loop that mutates a plain field paints nothing and raises no error.
       Every token has to reach the DOM through a signal write.
 
-   2. `streaming` is deliberately separate from `turns`. If each token rebuilt
-      the turns array, the @for over it would re-diff every message in the
+   2. `streaming` is deliberately separate from the turns list. If each token
+      rebuilt that array, the @for over it would re-diff every message in the
       conversation on every token. Kept apart, the list is untouched mid-reply
       and exactly one interpolation updates.
 
@@ -28,8 +33,12 @@ import type { Lang } from '../models';
 
 const KEY = 'et_chat';
 
-/** Matches the server cap. Trimmed from the front so a session cannot grow without end. */
+/** Matches the server cap. Trimmed from the front so one session cannot grow without end. */
 const MAX_TURNS = 40;
+/** How many conversations the history keeps before the oldest falls off. */
+const MAX_SESSIONS = 20;
+/** Characters of the first message used as a conversation's title. */
+const TITLE_LENGTH = 60;
 
 export type ChatMode = 'therapist' | 'client';
 export type ChatStatus = 'idle' | 'sending' | 'streaming' | 'error';
@@ -40,7 +49,24 @@ export interface ChatTurn {
   text: string;
 }
 
-interface StoredSession {
+export interface ChatSession {
+  id: string;
+  mode: ChatMode;
+  scenarioId: string | null;
+  /** Derived from the first thing the reader said; empty until they say it. */
+  title: string;
+  startedAt: string;
+  updatedAt: string;
+  turns: ChatTurn[];
+}
+
+interface StoredChat {
+  sessions: ChatSession[];
+  activeId: string | null;
+}
+
+/** The shape the first release wrote. Migrated on read, then never written again. */
+interface LegacyChat {
   mode: ChatMode;
   scenarioId: string | null;
   turns: ChatTurn[];
@@ -53,22 +79,32 @@ export class ChatService {
 
   /* ---- state ------------------------------------------------------------ */
 
-  private readonly modeSignal = signal<ChatMode | null>(null);
-  private readonly scenarioSignal = signal<string | null>(null);
-  private readonly turnsSignal = signal<ChatTurn[]>([]);
+  private readonly sessionsSignal = signal<ChatSession[]>([]);
+  private readonly activeIdSignal = signal<string | null>(null);
   private readonly streamingSignal = signal('');
   private readonly statusSignal = signal<ChatStatus>('idle');
   private readonly crisisSignal = signal(false);
   /** A `chat.err.*` key rather than a finished string, so it follows the language. */
   private readonly errorSignal = signal<string | null>(null);
 
-  readonly mode = this.modeSignal.asReadonly();
-  readonly scenarioId = this.scenarioSignal.asReadonly();
-  readonly turns = this.turnsSignal.asReadonly();
+  /** Newest first — the order the history rail lists them in. */
+  readonly sessions = computed(() =>
+    [...this.sessionsSignal()].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
+  );
+  readonly activeId = this.activeIdSignal.asReadonly();
   readonly streaming = this.streamingSignal.asReadonly();
   readonly status = this.statusSignal.asReadonly();
   readonly crisis = this.crisisSignal.asReadonly();
   readonly error = this.errorSignal.asReadonly();
+
+  readonly active = computed<ChatSession | null>(() => {
+    const id = this.activeIdSignal();
+    return id ? this.sessionsSignal().find(s => s.id === id) ?? null : null;
+  });
+
+  readonly mode = computed<ChatMode | null>(() => this.active()?.mode ?? null);
+  readonly scenarioId = computed<string | null>(() => this.active()?.scenarioId ?? null);
+  readonly turns = computed<ChatTurn[]>(() => this.active()?.turns ?? []);
 
   readonly busy = computed(() => {
     const status = this.statusSignal();
@@ -76,9 +112,7 @@ export class ChatService {
   });
 
   /** The conversation has run long enough that a debrief is worth offering. */
-  readonly canDebrief = computed(() =>
-    this.modeSignal() === 'client' && this.turnsSignal().length >= 4
-  );
+  readonly canDebrief = computed(() => this.mode() === 'client' && this.turns().length >= 4);
 
   private controller: AbortController | null = null;
   private buffer = '';
@@ -90,30 +124,61 @@ export class ChatService {
     inject(DestroyRef).onDestroy(() => this.abort());
   }
 
-  /* ---- session ---------------------------------------------------------- */
+  /* ---- sessions --------------------------------------------------------- */
 
   begin(mode: ChatMode, scenarioId: string | null): void {
     this.abort();
-    this.modeSignal.set(mode);
-    this.scenarioSignal.set(scenarioId);
-    this.turnsSignal.set([]);
-    this.streamingSignal.set('');
-    this.statusSignal.set('idle');
-    this.crisisSignal.set(false);
-    this.errorSignal.set(null);
+    const now = new Date().toISOString();
+    const session: ChatSession = {
+      id: `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`,
+      mode,
+      scenarioId,
+      title: '',
+      startedAt: now,
+      updatedAt: now,
+      turns: []
+    };
+    this.sessionsSignal.update(list => [session, ...list].slice(0, MAX_SESSIONS));
+    this.activeIdSignal.set(session.id);
+    this.clearTransient();
     this.persist();
   }
 
-  /** Back to the mode picker, and gone from storage. */
-  reset(): void {
+  /** Opens an earlier conversation. */
+  open(id: string): void {
+    if (id === this.activeIdSignal()) return;
     this.abort();
-    this.modeSignal.set(null);
-    this.scenarioSignal.set(null);
-    this.turnsSignal.set([]);
-    this.streamingSignal.set('');
-    this.statusSignal.set('idle');
-    this.crisisSignal.set(false);
-    this.errorSignal.set(null);
+    this.activeIdSignal.set(id);
+    this.clearTransient();
+    this.persist();
+  }
+
+  /**
+   * Leaves the current conversation and returns to the picker. Nothing is
+   * deleted — that is what `remove` is for.
+   */
+  newConversation(): void {
+    this.abort();
+    this.activeIdSignal.set(null);
+    this.clearTransient();
+    this.persist();
+  }
+
+  remove(id: string): void {
+    if (id === this.activeIdSignal()) this.abort();
+    this.sessionsSignal.update(list => list.filter(s => s.id !== id));
+    if (id === this.activeIdSignal()) {
+      this.activeIdSignal.set(null);
+      this.clearTransient();
+    }
+    this.persist();
+  }
+
+  clearAll(): void {
+    this.abort();
+    this.sessionsSignal.set([]);
+    this.activeIdSignal.set(null);
+    this.clearTransient();
     this.storage.remove(KEY);
   }
 
@@ -121,12 +186,19 @@ export class ChatService {
     this.crisisSignal.set(false);
   }
 
+  private clearTransient(): void {
+    this.streamingSignal.set('');
+    this.statusSignal.set('idle');
+    this.crisisSignal.set(false);
+    this.errorSignal.set(null);
+  }
+
   /* ---- sending ---------------------------------------------------------- */
 
   async send(text: string, lang: Lang): Promise<void> {
     const message = text.trim();
-    const mode = this.modeSignal();
-    if (!this.isBrowser || !message || !mode || this.busy()) return;
+    const session = this.active();
+    if (!this.isBrowser || !message || !session || this.busy()) return;
 
     this.errorSignal.set(null);
     this.appendTurn('user', message);
@@ -140,10 +212,10 @@ export class ChatService {
         headers: { 'content-type': 'application/json' },
         signal: this.controller.signal,
         body: JSON.stringify({
-          mode,
-          scenarioId: this.scenarioSignal(),
+          mode: session.mode,
+          scenarioId: session.scenarioId,
           lang,
-          turns: this.turnsSignal().map(turn => ({ role: turn.role, text: turn.text }))
+          turns: this.turns().map(turn => ({ role: turn.role, text: turn.text }))
         })
       });
 
@@ -284,30 +356,74 @@ export class ChatService {
   }
 
   private appendTurn(role: ChatTurn['role'], text: string): void {
-    const turn: ChatTurn = { id: `${role}-${Date.now()}-${this.turnsSignal().length}`, role, text };
-    this.turnsSignal.update(list => [...list, turn].slice(-MAX_TURNS));
+    const id = this.activeIdSignal();
+    if (!id) return;
+
+    this.sessionsSignal.update(list =>
+      list.map(session => {
+        if (session.id !== id) return session;
+        const turn: ChatTurn = {
+          id: `${role}-${Date.now()}-${session.turns.length}`,
+          role,
+          text
+        };
+        return {
+          ...session,
+          turns: [...session.turns, turn].slice(-MAX_TURNS),
+          // The first thing the reader says names the conversation.
+          title: session.title || (role === 'user' ? titleFrom(text) : ''),
+          updatedAt: new Date().toISOString()
+        };
+      })
+    );
     this.persist();
   }
 
   /* ---- persistence ------------------------------------------------------ */
 
   private persist(): void {
-    const mode = this.modeSignal();
-    if (!mode) return;
     this.storage.set(KEY, {
-      mode,
-      scenarioId: this.scenarioSignal(),
-      turns: this.turnsSignal()
-    } satisfies StoredSession);
+      sessions: this.sessionsSignal(),
+      activeId: this.activeIdSignal()
+    } satisfies StoredChat);
   }
 
   private restore(): void {
     if (!this.isBrowser) return;
-    const stored = this.storage.get<StoredSession | null>(KEY, null);
-    if (!stored || (stored.mode !== 'therapist' && stored.mode !== 'client')) return;
+    const stored = this.storage.get<StoredChat | LegacyChat | null>(KEY, null);
+    if (!stored) return;
 
-    this.modeSignal.set(stored.mode);
-    this.scenarioSignal.set(stored.scenarioId ?? null);
-    this.turnsSignal.set(Array.isArray(stored.turns) ? stored.turns.slice(-MAX_TURNS) : []);
+    // The first release stored one bare conversation. Carry it across rather
+    // than dropping somebody's transcript on an upgrade.
+    if (!('sessions' in stored)) {
+      const legacy = stored as LegacyChat;
+      if (legacy.mode !== 'therapist' && legacy.mode !== 'client') return;
+      const now = new Date().toISOString();
+      const turns = Array.isArray(legacy.turns) ? legacy.turns.slice(-MAX_TURNS) : [];
+      const first = turns.find(turn => turn.role === 'user');
+      const session: ChatSession = {
+        id: `c${Date.now().toString(36)}legacy`,
+        mode: legacy.mode,
+        scenarioId: legacy.scenarioId ?? null,
+        title: first ? titleFrom(first.text) : '',
+        startedAt: now,
+        updatedAt: now,
+        turns
+      };
+      this.sessionsSignal.set([session]);
+      this.activeIdSignal.set(turns.length ? session.id : null);
+      this.persist();
+      return;
+    }
+
+    const sessions = Array.isArray(stored.sessions) ? stored.sessions : [];
+    this.sessionsSignal.set(sessions.slice(0, MAX_SESSIONS));
+    const activeId = stored.activeId ?? null;
+    this.activeIdSignal.set(sessions.some(s => s.id === activeId) ? activeId : null);
   }
+}
+
+function titleFrom(text: string): string {
+  const clean = text.replace(/\s+/g, ' ').trim();
+  return clean.length > TITLE_LENGTH ? `${clean.slice(0, TITLE_LENGTH).trimEnd()}…` : clean;
 }
